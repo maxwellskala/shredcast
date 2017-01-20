@@ -1,18 +1,23 @@
 const express = require('express');
 const app = express();
 const pg = require('pg');
-pg.defaults.ssl = true;
 
 app.set('port', (process.env.PORT || 3001));
 
-if (process.env.NODE_ENV === 'production') {
-   app.use(express.static('client/build'));
+const inProd = process.env.NODE_ENV === 'production';
+
+if (inProd) {
+  app.use(express.static('client/build'));
+	pg.defaults.ssl = true;
 }
 
+const dbUrl = inProd 
+	? process.env.DATABASE_URL
+	: 'postgres://boilerplate:test@localhost/boilerplate_db';
+
 app.get('/api/test', (req, res) => {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-  	console.log(process.env.DATABASE_URL, 'THIS IS THE DATABASE URL');
-  	console.log(err);
+	console.log(dbUrl);
+  pg.connect(dbUrl, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
       if (err) {
@@ -26,5 +31,7 @@ app.get('/api/test', (req, res) => {
 
 
 app.listen(app.get('port'), () => {
-  console.log(`Find the server at: http://localhost:${app.get('port')}/`);
+	if (!inProd) {
+  	console.log(`Find the server at: http://localhost:${app.get('port')}/`)
+  };
 });
