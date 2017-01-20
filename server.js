@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const pg = require('pg');
 
 app.set('port', (process.env.PORT || 3001));
 
@@ -8,7 +9,16 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.get('/api/test', (req, res) => {
-  res.json({test: "successful"});
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    client.query('SELECT * FROM test_table', function(err, result) {
+      done();
+      if (err) {
+      	console.error(err); response.send("Error " + err);
+      } else {
+			  res.json({test: result.rows[0].test_column});
+      }
+    });
+  });
 });
 
 
