@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const pg = require('pg');
+pg.defaults.ssl = true;
 
 app.set('port', (process.env.PORT || 3001));
 
@@ -10,6 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.get('/api/test', (req, res) => {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+  	console.log(process.env.DATABASE_URL, 'THIS IS THE DATABASE URL');
   	console.log(err);
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
