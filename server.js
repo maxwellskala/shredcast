@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const pg = require('pg');
 
+const user = require('./routes/user');
+
 app.set('port', (process.env.PORT || 3001));
 
 const inProd = process.env.NODE_ENV === 'production';
@@ -15,19 +17,7 @@ const dbUrl = inProd
 	? process.env.DATABASE_URL
 	: 'postgres://boilerplate:test@localhost/boilerplate_db';
 
-app.get('/api/test', (req, res) => {
-  pg.connect(dbUrl, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
-      done();
-      if (err) {
-      	console.error(err); response.send("Error " + err);
-      } else {
-			  res.json({test: result.rows[0].test_column});
-      }
-    });
-  });
-});
-
+app.get('/api/test', user.test(pg, dbUrl));
 
 app.listen(app.get('port'), () => {
 	if (!inProd) {
