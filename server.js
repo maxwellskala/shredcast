@@ -16,7 +16,6 @@ const dbUrl = inProd
 	: 'postgres://boilerplate:test@localhost/boilerplate_db';
 
 app.get('/api/test', (req, res) => {
-	console.log(dbUrl);
   pg.connect(dbUrl, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
