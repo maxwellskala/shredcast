@@ -3,7 +3,7 @@ const app = express();
 const pg = require('pg');
 
 const user = require('./routes/user');
-const models = require('./models');
+const models = require('./db/models');
 
 app.set('port', (process.env.PORT || 3001));
 
