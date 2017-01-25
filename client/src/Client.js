@@ -1,10 +1,3 @@
-function test(cb) {
-  return fetch('api/test', {
-    accept: 'application/json',
-  }).then(checkStatus)
-    .then(parseJSON)
-    .then(cb);
-}
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -22,5 +15,26 @@ function parseJSON(response) {
   return response.json();
 }
 
-const Client = { test };
+function test(cb) {
+  return fetch('api/test', {
+    accept: 'application/json'
+  }).then(checkStatus)
+    .then(parseJSON)
+    .then(cb);
+}
+
+function testPost(cb) {
+  return fetch('api/user/signup', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    body: JSON.stringify({test: 'this is a test post'})
+  }).then(checkStatus)
+    .then(parseJSON)
+    .then(cb);
+}
+
+const Client = { test, testPost };
 export default Client;

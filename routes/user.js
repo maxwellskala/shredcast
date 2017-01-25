@@ -10,3 +10,12 @@ exports.test = (db, dbUrl) => (req, res) => {
     });
   });
 };
+
+exports.signup = (User) => (req, res) => {
+  console.log(req.body, 'this is req body');
+  res.json({test: 'this is a stub endpoint'});
+};
+
+exports.login = (User) => (req, res) => {
+  res.json({test: 'this is a stub endpoint'});
+};

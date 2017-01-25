@@ -10,6 +10,7 @@ class App extends Component {
   };
 
   componentDidMount() {
+    Client.testPost((response) => console.log(response, 'this is backend response'));
     Client.test((response) => this.setState({testResult: response.test}));
   };
 

@@ -1,10 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const pg = require('pg');
 
 const user = require('./routes/user');
-const models = require('./db/models');
+const db = require('./db/models');
 
+app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 3001));
 
 const inProd = process.env.NODE_ENV === 'production';
@@ -20,7 +22,9 @@ const dbUrl = inProd
 
 // API endpoints
 app.get('/api/test', user.test(pg, dbUrl));
+app.post('/api/user/signup', user.signup(db.User));
+app.post('/api/user/login', user.login(db.User));
 
-models.sequelize.sync().then(() => {
+db.sequelize.sync().then(() => {
   app.listen(app.get('port'));
 });
