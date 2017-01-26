@@ -3,7 +3,7 @@ import Client from './Client';
 import logo from './logo.svg';
 import './App.css';
 
-const USERNAME = 'username';
+const EMAIL = 'email';
 const PASSWORD = 'password';
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       testResult: 'pending',
-      [USERNAME]: '',
+      [EMAIL]: '',
       [PASSWORD]: ''
     };
 
@@ -30,8 +30,8 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault();
     Client.signup(
-      this.state.username,
-      this.state.password,
+      this.state[EMAIL],
+      this.state[PASSWORD],
       (response) => console.log(response, 'from backend')
     );
   };
@@ -50,11 +50,11 @@ class App extends Component {
         <h3>Sign up</h3>
         <form className="signup-form" onSubmit={this.handleSubmit}>
           <label>
-            Username:
+            Email:
             <input
               type="text"
-              value={this.state.USERNAME}
-              onChange={this.handleChange(USERNAME)}
+              value={this.state.EMAIL}
+              onChange={this.handleChange(EMAIL)}
             />
           </label>
           <label>
