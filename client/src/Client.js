@@ -23,18 +23,21 @@ function test(cb) {
     .then(cb);
 }
 
-function testPost(cb) {
+function signup(email, password, cb) {
   return fetch('api/user/signup', {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     method: 'post',
-    body: JSON.stringify({test: 'this is a test post'})
+    body: JSON.stringify({
+      email,
+      password
+    })
   }).then(checkStatus)
     .then(parseJSON)
     .then(cb);
 }
 
-const Client = { test, testPost };
+const Client = { test, signup };
 export default Client;
