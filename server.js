@@ -10,6 +10,9 @@ const session = require('express-session');
 const user = require('./routes/user');
 const db = require('./db/models');
 
+const app = express();
+app.set('port', (process.env.PORT || 3001));
+
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => {
   db.User.findById(id)
@@ -36,9 +39,6 @@ passport.use(new localStrategy(
     .catch((err) => done(err, null));
   }
 ));
-
-const app = express();
-app.set('port', (process.env.PORT || 3001));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
