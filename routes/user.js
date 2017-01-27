@@ -12,7 +12,6 @@ exports.test = (db, dbUrl) => (req, res) => {
 };
 
 exports.signup = (User) => (req, res) => {
-  console.log(req.body, 'this is the request body from the frontend');
   return res.json({test: 'Hooray, it worked!'});
 };
 
