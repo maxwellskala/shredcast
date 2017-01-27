@@ -15,23 +15,26 @@ passport.deserializeUser((id, done) => {
     .then((user) => done(null, user))
     .catch((err) => done(err, null));
 });
-passport.use(new localStrategy((email, password, done) => {
-  db.User.findOne({
-    where: {
-      email: email
-    }
-  })
-  .then((user) => {
-    if (!user) {
-      done(null, false);
-    } else if (user.password !== password) {
-      done(null, false);
-    } else {
-      done(null, user);
-    }
-  })
-  .catch((err) => done(err, null));
-}));
+passport.use(new localStrategy(
+  { usernameField: "email" },
+  (email, password, done) => {
+    db.User.findOne({
+      where: {
+        email: email
+      }
+    })
+    .then((user) => {
+      if (!user) {
+        done(null, false);
+      } else if (user.password !== password) {
+        done(null, false);
+      } else {
+        done(null, user);
+      }
+    })
+    .catch((err) => done(err, null));
+  }
+));
 
 const app = express();
 app.set('port', (process.env.PORT || 3001));
@@ -60,7 +63,7 @@ const dbUrl = inProd
 // API endpoints
 app.get('/api/test', user.test(pg, dbUrl));
 app.post('/api/user/signup', user.signup(db.User));
-app.post('/api/user/login', user.login(db.User));
+app.post('/api/user/login', passport.authenticate('local'), user.login);
 
 db.sequelize.sync().then(() => {
   app.listen(app.get('port'));

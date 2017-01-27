@@ -21,6 +21,6 @@ exports.signup = (User) => (req, res) => {
   .catch((err) => res.json({err}));
 };
 
-exports.login = (User) => (req, res) => {
-  res.json({test: 'this is a stub endpoint'});
+exports.login = (req, res) => {
+  return res.json({user: req.user});
 };

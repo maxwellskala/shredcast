@@ -39,5 +39,21 @@ function signup(email, password, cb) {
     .then(cb);
 }
 
-const Client = { test, signup };
+function login(email, password, cb) {
+  return fetch('api/user/login', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    body: JSON.stringify({
+      email,
+      password
+    })
+  }).then(checkStatus)
+    .then(parseJSON)
+    .then(cb);
+}
+
+const Client = { test, signup, login };
 export default Client;
