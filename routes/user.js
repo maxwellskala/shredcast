@@ -12,7 +12,13 @@ exports.test = (db, dbUrl) => (req, res) => {
 };
 
 exports.signup = (User) => (req, res) => {
-  return res.json({test: 'Hooray, it worked!'});
+  const { email, password } = req.body;
+  User.create({
+    email,
+    password
+  })
+  .then((user) => res.json({user}))
+  .catch((err) => res.json({err}));
 };
 
 exports.login = (User) => (req, res) => {
