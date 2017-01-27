@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const pg = require('pg');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
@@ -26,10 +27,10 @@ passport.use(new localStrategy(
     .then((user) => {
       if (!user) {
         done(null, false);
-      } else if (user.password !== password) {
-        done(null, false);
       } else {
-        done(null, user);
+        bcrypt.compare(password, user.password, (err, res) => {
+          res ? done(null, user) : done(null, false);
+        });
       }
     })
     .catch((err) => done(err, null));
