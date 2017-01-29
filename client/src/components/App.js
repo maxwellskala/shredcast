@@ -14,16 +14,36 @@ class App extends Component {
 
     // @TODO refactor this garbage once class properties are legit
     this.handleReceiveUser = this.handleReceiveUser.bind(this);
-    this.renderUserBody = this.renderUserBody.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   };
 
   componentDidMount() {
-    Client.test((response) => this.setState({testResult: response.test}));
+    Client.checkSession((response) => {
+      const user = response.user;
+      if (user) {
+        this.setState({ user });
+      }
+    });
+    Client.test((response) => this.setState({ testResult: response.test }));
   };
 
   handleReceiveUser(response) {
     const user = response.user;
     this.setState({ user });
+  };
+
+  handleLogout() {
+    Client.logout(
+      (response) => this.setState({ user: null })
+    );
+  };
+
+  renderLogoutButton() {
+    const { user } = this.state;
+    if (user === null) {
+      return null;
+    }
+    return <button onClick={this.handleLogout}>Log out</button>;
   };
 
   renderUserBody() {
@@ -54,6 +74,7 @@ class App extends Component {
         </p>
         <p>Test result: {this.state.testResult}</p>
         {this.renderUserBody()}
+        {this.renderLogoutButton()}
       </div>
     );
   }

@@ -41,11 +41,12 @@ passport.use(new localStrategy(
 ));
 
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser('mysecret'));
 app.use(session({
   secret: 'mysecret',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { expires: false }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -63,8 +64,10 @@ const dbUrl = inProd
 
 // API endpoints
 app.get('/api/test', user.test(pg, dbUrl));
+app.get('/api/user', user.checkSession);
 app.post('/api/user/signup', user.signup(db.User));
 app.post('/api/user/login', passport.authenticate('local'), user.login);
+app.get('/api/user/logout', user.logout);
 
 db.sequelize.sync().then(() => {
   app.listen(app.get('port'));
