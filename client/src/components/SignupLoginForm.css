@@ -1,0 +1,7 @@
+.toggle-form-text > a {
+  color: blue;
+}
+
+.toggle-form-text > a:hover {
+  cursor: pointer;
+}
