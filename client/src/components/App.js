@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Client from './Client';
-import logo from './logo.svg';
+import Client from '../data/Client';
+import logo from '../assets/logo.svg';
 import './App.css';
 
 const SIGNUP = 'signup';
