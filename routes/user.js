@@ -12,12 +12,10 @@ exports.test = (db, dbUrl) => (req, res) => {
 };
 
 exports.checkSession = (req, res) => {
-  console.log(req.sessionID, '<- sessionId, checkSession');
-  console.log(req.user, '<- req.user, checkSession');
   if (!req.user) {
-    res.json({ user: false });
+    return res.json({ user: false });
   } else {
-    res.json({ user: req.user });
+    return res.json({ user: req.user });
   }
 };
 
@@ -32,18 +30,14 @@ exports.signup = (User) => (req, res) => {
 };
 
 exports.login = (req, res) => {
-  console.log(req.sessionID, '<- sessionId, login');
-  console.log(req.user, '<- req.user, login');
   return res.json({ user: req.user });
 };
 
 exports.logout = (req, res) => {
-  console.log(req.sessionID, '<- sessionId, logout');
-  console.log(req.user, '<- req.user, logout');
   if (!req.user) {
-    res.json({ err: 'Already logged out!' });
+    return res.json({ err: 'Already logged out!' });
   } else {
     req.logout();
-    res.json({ success: 'Logged out!' });
+    return res.json({ success: 'Logged out!' });
   }
 }

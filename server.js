@@ -6,6 +6,7 @@ const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 
 const user = require('./routes/user');
 const db = require('./db/models');
@@ -40,27 +41,31 @@ passport.use(new localStrategy(
   }
 ));
 
-app.use(bodyParser.json());
-app.use(cookieParser('mysecret'));
-app.use(session({
-  secret: 'mysecret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { expires: false }
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-
 const inProd = process.env.NODE_ENV === 'production';
 
 if (inProd) {
   app.use(express.static('client/build'));
-	pg.defaults.ssl = true;
+  pg.defaults.ssl = true;
 }
 
 const dbUrl = inProd 
-	? process.env.DATABASE_URL
-	: 'postgres://boilerplate:test@localhost/boilerplate_db';
+  ? process.env.DATABASE_URL
+  : 'postgres://boilerplate:test@localhost/boilerplate_db';
+
+app.use(bodyParser.json());
+app.use(cookieParser('mysecret'));
+app.use(session({
+  store: new pgSession({
+    pg: pg,
+    conString: dbUrl
+  }),
+  secret: 'mysecret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // API endpoints
 app.get('/api/test', user.test(pg, dbUrl));
