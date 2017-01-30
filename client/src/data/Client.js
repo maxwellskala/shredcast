@@ -29,7 +29,8 @@ function checkSession(cb) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    method: 'get'
+    method: 'get',
+    credentials: 'same-origin'
   })
   .then(checkStatus)
   .then(parseJSON)
@@ -59,6 +60,7 @@ function login(email, password, cb) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
+    credentials: 'same-origin',
     method: 'post',
     body: JSON.stringify({
       email,
@@ -76,7 +78,8 @@ function logout(cb) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    method: 'get'
+    method: 'get',
+    credentials: 'same-origin'
   })
   .then(checkStatus)
   .then(parseJSON)

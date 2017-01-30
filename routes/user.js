@@ -34,10 +34,6 @@ exports.login = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  if (!req.user) {
-    return res.json({ err: 'Already logged out!' });
-  } else {
-    req.logout();
-    return res.json({ success: 'Logged out!' });
-  }
+  req.logout();
+  return res.json({ success: 'Logged out!' });
 }
