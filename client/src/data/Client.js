@@ -15,14 +15,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-function test(cb) {
-  return fetch('api/test', {
-    accept: 'application/json'
-  }).then(checkStatus)
-    .then(parseJSON)
-    .then(cb);
-}
-
 function checkSession(cb) {
   return fetch('api/user', {
     headers: {
@@ -86,5 +78,5 @@ function logout(cb) {
   .then(cb);
 }
 
-const Client = { test, checkSession, signup, login, logout };
+const Client = { checkSession, signup, login, logout };
 export default Client;

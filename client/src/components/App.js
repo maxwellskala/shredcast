@@ -8,7 +8,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      testResult: 'pending',
       user: null
     };
 
@@ -24,7 +23,6 @@ class App extends Component {
         this.setState({ user });
       }
     });
-    Client.test((response) => this.setState({ testResult: response.test }));
   };
 
   handleReceiveUser(response) {
@@ -72,7 +70,6 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <p>Test result: {this.state.testResult}</p>
         {this.renderUserBody()}
         {this.renderLogoutButton()}
       </div>

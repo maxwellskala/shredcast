@@ -67,7 +67,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // API endpoints
-app.get('/api/test', user.test(pg, dbUrl));
 app.get('/api/user', user.checkSession);
 app.post('/api/user/signup', user.signup(db.User));
 app.post('/api/user/login', passport.authenticate('local'), user.login);
