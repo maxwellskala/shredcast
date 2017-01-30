@@ -23,6 +23,19 @@ function test(cb) {
     .then(cb);
 }
 
+function checkSession(cb) {
+  return fetch('api/user', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'get'
+  })
+  .then(checkStatus)
+  .then(parseJSON)
+  .then(cb);
+}
+
 function signup(email, password, cb) {
   return fetch('api/user/signup', {
     headers: {
@@ -34,9 +47,10 @@ function signup(email, password, cb) {
       email,
       password
     })
-  }).then(checkStatus)
-    .then(parseJSON)
-    .then(cb);
+  })
+  .then(checkStatus)
+  .then(parseJSON)
+  .then(cb);
 }
 
 function login(email, password, cb) {
@@ -50,10 +64,24 @@ function login(email, password, cb) {
       email,
       password
     })
-  }).then(checkStatus)
-    .then(parseJSON)
-    .then(cb);
+  })
+  .then(checkStatus)
+  .then(parseJSON)
+  .then(cb);
 }
 
-const Client = { test, signup, login };
+function logout(cb) {
+  return fetch('api/user/logout', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'get'
+  })
+  .then(checkStatus)
+  .then(parseJSON)
+  .then(cb);
+}
+
+const Client = { test, checkSession, signup, login, logout };
 export default Client;
