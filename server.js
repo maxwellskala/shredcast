@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
+const validator = require('express-validator');
 
 const user = require('./routes/user');
 const db = require('./db/models');
@@ -53,6 +54,7 @@ const dbUrl = inProd
   : 'postgres://boilerplate:test@localhost/boilerplate_db';
 
 app.use(bodyParser.json());
+app.use(validator());
 app.use(cookieParser('mysecret'));
 app.use(session({
   store: new pgSession({
