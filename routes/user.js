@@ -1,7 +1,7 @@
 exports.checkSession = (req, res) => {
   if (!req.user) {
     return res
-      .status(204)
+      .status(200)
       .json({ user: false });
   } else {
     return res
