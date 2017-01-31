@@ -8,7 +8,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      errors: {
+        signupLoginForm: ['Please enter a valid email address']
+      }
     };
 
     // @TODO refactor this garbage once class properties are legit
@@ -45,13 +48,14 @@ class App extends Component {
   };
 
   renderUserBody() {
-    const { user } = this.state;
+    const { user, errors } = this.state;
     if (user === null) {
       return (
         <SignupLoginForm
           onLogin={Client.login}
           onSignup={Client.signup}
           onReceiveUser={this.handleReceiveUser}
+          errors={errors.signupLoginForm}
         />
       );
     } else if (!user.email) {

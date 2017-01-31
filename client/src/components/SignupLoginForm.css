@@ -1,3 +1,7 @@
+.errors-container > .error {
+  color: red;
+}
+
 .toggle-form-text > a {
   color: blue;
 }

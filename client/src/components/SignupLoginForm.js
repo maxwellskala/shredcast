@@ -15,6 +15,7 @@ class SignupLoginForm extends Component {
 
     this.getFormToggleText = this.getFormToggleText.bind(this);
     this.handleFormToggle = this.handleFormToggle.bind(this);
+    this.renderErrors = this.renderErrors.bind(this);
   };
 
   getFormToggleText(showLogin) {
@@ -44,6 +45,18 @@ class SignupLoginForm extends Component {
     })
   };
 
+  renderErrors() {
+    const { errors } = this.props;
+    if (!errors) {
+      return null;
+    }
+    return (
+      <div className='errors-container'>
+        {errors.map((errorText) => <p className='error'>{errorText}</p>)}
+      </div>
+    );
+  };
+
   render() {
     const { onLogin, onSignup, onReceiveUser } = this.props;
     const { showLogin, email, password } = this.state;
@@ -60,6 +73,7 @@ class SignupLoginForm extends Component {
       <div className='signup-login-container'>
         <h3>{showLogin ? 'Login' : 'Signup'}</h3>
         {this.getFormToggleText(showLogin)}
+        {this.renderErrors()}
         <form className='signup-login-form' onSubmit={handleSubmit}>
           <label>
             Email:
@@ -87,7 +101,8 @@ class SignupLoginForm extends Component {
 SignupLoginForm.propTypes = {
   onLogin: React.PropTypes.func.isRequired,
   onSignup: React.PropTypes.func.isRequired,
-  onReceiveUser: React.PropTypes.func.isRequired
+  onReceiveUser: React.PropTypes.func.isRequired,
+  errors: React.PropTypes.array
 }
 
 export default SignupLoginForm;
