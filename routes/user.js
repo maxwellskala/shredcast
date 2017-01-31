@@ -11,6 +11,17 @@ exports.checkSession = (req, res) => {
 };
 
 exports.signup = (User) => (req, res) => {
+  req.checkBody('email', 'Not a valid email address')
+    .isEmail();
+  req.checkBody('password', 'ASCII passwords only')
+    .isAscii();
+  const validationErrors = req.validationErrors();
+  if (validationErrors) {
+    return res
+      .status(400)
+      .json({ validationErrors });
+  }
+  
   const { email, password } = req.body;
   User.create({
     email,
