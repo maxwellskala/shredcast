@@ -1,18 +1,16 @@
-
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    const error = new Error(`HTTP Error ${response.statusText}`);
-    error.status = response.statusText;
-    error.response = response;
-    console.log(error); // eslint-disable-line no-console
-    throw error;
-  }
-}
-
 function parseJSON(response) {
   return response.json();
+}
+
+function prepareErrors(response) {
+  const validationErrors = response.validationErrors;
+  if (!validationErrors) {
+    return response;
+  }
+  const processedErrors = validationErrors.map((rawError) => {
+    return rawError.msg;
+  });
+  return { ...response, validationErrors: processedErrors };
 }
 
 function checkSession(cb) {
@@ -24,8 +22,8 @@ function checkSession(cb) {
     method: 'get',
     credentials: 'same-origin'
   })
-  .then(checkStatus)
   .then(parseJSON)
+  .then(prepareErrors)
   .then(cb);
 }
 
@@ -41,8 +39,8 @@ function signup(email, password, cb) {
       password
     })
   })
-  .then(checkStatus)
   .then(parseJSON)
+  .then(prepareErrors)
   .then(cb);
 }
 
@@ -59,8 +57,8 @@ function login(email, password, cb) {
       password
     })
   })
-  .then(checkStatus)
   .then(parseJSON)
+  .then(prepareErrors)
   .then(cb);
 }
 
@@ -73,8 +71,8 @@ function logout(cb) {
     method: 'get',
     credentials: 'same-origin'
   })
-  .then(checkStatus)
   .then(parseJSON)
+  .then(prepareErrors)
   .then(cb);
 }
 
