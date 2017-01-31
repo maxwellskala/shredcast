@@ -4,15 +4,19 @@ import SignupLoginForm from './SignupLoginForm';
 import logo from '../assets/logo.svg';
 import './App.css';
 
+// @TODO state seems fragile since we can accidentally remove an error key, fix that
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      errors: {
+        signupLoginForm: null
+      }
     };
 
     // @TODO refactor this garbage once class properties are legit
-    this.handleReceiveUser = this.handleReceiveUser.bind(this);
+    this.handleSignupLoginResponse = this.handleSignupLoginResponse.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   };
 
@@ -25,7 +29,15 @@ class App extends Component {
     });
   };
 
-  handleReceiveUser(response) {
+  handleSignupLoginResponse(response) {
+    const validationErrors = response.validationErrors;
+    if (validationErrors) {
+      const currentErrors = this.state.errors;
+      this.setState({
+        errors: { ...currentErrors, signupLoginForm: validationErrors }
+      });
+      return;
+    }
     const user = response.user;
     this.setState({ user });
   };
@@ -45,13 +57,14 @@ class App extends Component {
   };
 
   renderUserBody() {
-    const { user } = this.state;
+    const { user, errors } = this.state;
     if (user === null) {
       return (
         <SignupLoginForm
           onLogin={Client.login}
           onSignup={Client.signup}
-          onReceiveUser={this.handleReceiveUser}
+          onReceiveUser={this.handleSignupLoginResponse}
+          errors={errors.signupLoginForm}
         />
       );
     } else if (!user.email) {
