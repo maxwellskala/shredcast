@@ -50,9 +50,12 @@ class SignupLoginForm extends Component {
     if (!errors) {
       return null;
     }
+    const errorChildren = errors.map((errorText) => {
+      return <p key={errorText} className='error'>{errorText}</p>;
+    });
     return (
       <div className='errors-container'>
-        {errors.map((errorText) => <p className='error'>{errorText}</p>)}
+        {errorChildren}
       </div>
     );
   };
