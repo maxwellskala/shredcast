@@ -49,7 +49,7 @@ if (inProd) {
   pg.defaults.ssl = true;
 }
 
-const dbUrl = inProd 
+const dbUrl = inProd || process.env.NODE_ENV === 'test'
   ? process.env.DATABASE_URL
   : 'postgres://boilerplate:test@localhost/boilerplate_db';
 
@@ -77,3 +77,5 @@ app.get('/api/user/logout', user.logout);
 db.sequelize.sync().then(() => {
   app.listen(app.get('port'));
 });
+
+module.exports = app; // for testing
