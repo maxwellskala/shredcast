@@ -75,7 +75,9 @@ app.post('/api/user/login', passport.authenticate('local'), user.login);
 app.get('/api/user/logout', user.logout);
 
 db.sequelize.sync().then(() => {
-  app.listen(app.get('port'));
+  if (process.env.NODE_ENV !== 'test') {
+    app.listen(app.get('port'));
+  }
 });
 
 module.exports = app; // for testing
