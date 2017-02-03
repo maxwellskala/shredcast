@@ -1,6 +1,4 @@
 process.env.NODE_ENV = 'test';
-process.env.DATABASE_URL =
-  'postgres://boilerplate:test@localhost/boilerplate_db_test';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
