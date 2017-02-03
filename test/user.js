@@ -11,15 +11,35 @@ const User = require('../db/models').User;
 const VALIDATION_ERRORS = 'validationErrors';
 const PARAM = 'param';
 
-describe('routes/user', () => {
-  beforeEach((done) => {
-    User.destroy({
-      where: {},
-      truncate: true
-    }).then(() => done());
-  });
+const TEST_EMAIL = 'test@test.com';
+const TEST_PASSWORD = 'test';
 
+const destroyAllUsers = (done) => {
+    User.destroy({
+      where: {}
+    }).then(() => done());
+};
+
+const createTestUser = (email, password, done) => {
+  User.create({
+    email,
+    password
+  }).then(() => done());
+};
+
+describe('routes/user', () => {
+  describe('user.checkSession') => {
+
+  }
   describe('user.signup', () => {
+    beforeEach((done) => {
+      destroyAllUsers(done);
+    });
+
+    after((done) => {
+      destroyAllUsers(done);
+    });
+
     it('errors when given non-email as email parameter', (done) => {
       const badSignup = {
         email: 'notAnEmail',
@@ -113,14 +133,12 @@ describe('routes/user', () => {
   });
 
   describe('user.login', () => {
-    const testEmail = 'test@test.com';
-    const testPassword = 'test';
+    before((done) => {
+      createTestUser(TEST_EMAIL, TEST_PASSWORD, done);
+    });
 
-    beforeEach((done) => {
-      User.create({
-        email: testEmail,
-        password: testPassword
-      }).then(() => done());
+    after((done) => {
+      destroyAllUsers(done);
     });
 
     it('fails when an incorrect email is supplied', (done) => {
@@ -134,6 +152,68 @@ describe('routes/user', () => {
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.error).to.not.be.empty;
+          done();
+        });
+    });
+
+    it('fails when an incorrect password is supplied', (done) => {
+      const invalidLogin = {
+        email: 'test@email.com',
+        password: 'notTest'
+      };
+      chai.request(app)
+        .post('/api/user/login')
+        .send(invalidLogin)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          expect(res.error).to.not.be.empty;
+          done();
+        });
+    });
+
+    it('returns a user when correct credentials are supplied', (done) => {
+      const validLogin = {
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD
+      };
+      chai.request(app)
+        .post('/api/user/login')
+        .send(validLogin)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.error).to.be.empty;
+          expect(res.body).to.include.keys('user');
+          const user = res.body.user;
+          expect(user.email).to.equal(validLogin.email);
+          done();
+        });
+    });
+  });
+
+  describe('user.logout', () => {
+    before((done) => {
+      createTestUser(TEST_EMAIL, TEST_EMAIL, done);
+    });
+
+    beforeEach((done) => {
+      const loginCredentials = {
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD
+      };
+      chai.request(app)
+        .post('/api/user/login')
+        .send(loginCredentials)
+        .end((err, res) => {
+          done();
+        });
+    });
+
+    it('doesn\'t error', (done) => {
+      chai.request(app)
+        .get('/api/user/logout')
+        .end((err, res) => {
+          expect(res.status).to.equal(204)
+          expect(res.error).to.be.empty;
           done();
         });
     });
