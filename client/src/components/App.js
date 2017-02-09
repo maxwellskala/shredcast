@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       user: null,
       errors: {
-        signupLoginForm: null
+        signupLoginForm: []
       }
     };
 
