@@ -47,7 +47,7 @@ class SignupLoginForm extends Component {
 
   renderErrors() {
     const { errors } = this.props;
-    if (!errors) {
+    if (!errors || !errors.length) {
       return null;
     }
     const errorChildren = errors.map((errorText) => {
