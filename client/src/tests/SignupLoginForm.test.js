@@ -1,5 +1,4 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 
 import { wrapAndSetState, setStateAndRender } from './utils';
 import SignupLoginForm from '../components/SignupLoginForm';
