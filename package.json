@@ -25,12 +25,16 @@
     "sequelize-cli": "^2.5.1"
   },
   "devDependencies": {
-    "concurrently": "^3.1.0"
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "concurrently": "^3.1.0",
+    "mocha": "^3.2.0"
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "babel-node server.js",
     "client": "babel-node start-client.js",
+    "test": "mocha",
     "heroku-postbuild": "babel-node build-client.js"
   },
   "author": "Maxwell Skala",

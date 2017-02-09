@@ -11,6 +11,7 @@ const validator = require('express-validator');
 
 const user = require('./routes/user');
 const db = require('./db/models');
+const configureDb = require('./db/config');
 
 const app = express();
 app.set('port', (process.env.PORT || 3001));
@@ -42,16 +43,14 @@ passport.use(new localStrategy(
   }
 ));
 
-const inProd = process.env.NODE_ENV === 'production';
+const nodeEnv = process.env.NODE_ENV || 'development';
 
-if (inProd) {
+if (nodeEnv === 'production') {
   app.use(express.static('client/build'));
   pg.defaults.ssl = true;
 }
 
-const dbUrl = inProd 
-  ? process.env.DATABASE_URL
-  : 'postgres://boilerplate:test@localhost/boilerplate_db';
+const dbUrl= configureDb(nodeEnv);
 
 app.use(bodyParser.json());
 app.use(validator());
@@ -75,5 +74,9 @@ app.post('/api/user/login', passport.authenticate('local'), user.login);
 app.get('/api/user/logout', user.logout);
 
 db.sequelize.sync().then(() => {
-  app.listen(app.get('port'));
+  if (process.env.NODE_ENV !== 'test') {
+    app.listen(app.get('port'));
+  }
 });
+
+module.exports = app; // for testing
