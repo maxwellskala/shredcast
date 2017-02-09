@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       user: null,
       errors: {
-        signupLoginForm: null
+        signupLoginForm: []
       }
     };
 
@@ -58,6 +58,7 @@ class App extends Component {
 
   renderUserBody() {
     const { user, errors } = this.state;
+    const loggedInMessageClassName = 'logged-in-message';
     if (user === null) {
       return (
         <SignupLoginForm
@@ -68,9 +69,17 @@ class App extends Component {
         />
       );
     } else if (!user.email) {
-      return <div>You're logged in as an unknown user, WTF!</div>;
+      return (
+        <div className={loggedInMessageClassName}>
+          You're logged in as an unknown user, WTF!
+        </div>
+      );
     }
-    return <div>Congrats! You are logged in with email {user.email} </div>;
+    return (
+      <div className={loggedInMessageClassName}>
+        Congrats! You are logged in with email {user.email}
+      </div>
+    );
   };
 
   render() {
