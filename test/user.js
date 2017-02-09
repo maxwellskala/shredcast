@@ -16,21 +16,67 @@ const TEST_PASSWORD = 'test';
 
 const destroyAllUsers = (done) => {
     User.destroy({
-      where: {}
-    }).then(() => done());
+      truncate: true,
+      cascade: true
+    })
+    .then(() => done())
+    .catch((err) => done());
 };
 
 const createTestUser = (email, password, done) => {
   User.create({
     email,
     password
-  }).then(() => done());
+  })
+  .then(() => {
+    done();
+  })
+  .catch((err) => {
+    done(err);
+  });
 };
 
 describe('routes/user', () => {
-  describe('user.checkSession') => {
+  describe('user.checkSession', () => {
+    before((done) => {
+      createTestUser(TEST_EMAIL, TEST_PASSWORD, done);
+    });
 
-  }
+    after((done) => {
+      destroyAllUsers(done);
+    });
+
+    it('returns no user if nobody logged in', (done) => {
+      chai.request(app)
+        .get('/api/user')
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.include.keys('user');
+          expect(res.body.user).to.be.false;
+          done();
+        });
+    });
+
+    it('returns a user if they are logged in', (done) => {
+      const loginCredentials = {
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD
+      };
+      chai.request(app)
+        .post('/api/user/login')
+        .send(loginCredentials)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.include.keys('user');
+          expect(res.body.user).to.exist;
+          expect(res.body.user.email).to.equal(TEST_EMAIL);
+          done();
+        });
+    });
+  });
+
   describe('user.signup', () => {
     beforeEach((done) => {
       destroyAllUsers(done);
@@ -193,6 +239,10 @@ describe('routes/user', () => {
   describe('user.logout', () => {
     before((done) => {
       createTestUser(TEST_EMAIL, TEST_EMAIL, done);
+    });
+
+    after((done) => {
+      destroyAllUsers(done);
     });
 
     beforeEach((done) => {
