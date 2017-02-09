@@ -33,9 +33,9 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "babel-node server.js",
-    "client": "babel-node start-client.js",
+    "client": "babel-node scripts/start-client.js",
     "test": "mocha",
-    "heroku-postbuild": "babel-node build-client.js"
+    "heroku-postbuild": "babel-node scripts/build-client.js"
   },
   "author": "Maxwell Skala",
   "license": "ISC"
