@@ -59,6 +59,6 @@ exports.login = (passport) => (req, res) => {
 exports.logout = (req, res) => {
   req.logout();
   return res
-    .status(204)
+    .status(200)
     .json({ success: 'Logged out!' });
 }
