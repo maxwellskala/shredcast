@@ -1,7 +1,11 @@
 {
-  "name": "react-node-boilerplate",
+  "name": "Shredcast",
   "version": "1.0.0",
-  "description": "Boilerplate code for spinning up React projects.",
+  "description": "Find the best snow any time.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maxwellskala/shredcast1.0"
+  },
   "engines": {
     "node": "6.9.4"
   },

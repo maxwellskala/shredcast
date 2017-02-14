@@ -1,15 +1,15 @@
 {
   "development": {
-    "username": "boilerplate",
+    "username": "shredcast",
     "password": "test",
-    "database": "boilerplate_db",
+    "database": "shredcast_db",
     "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
-    "username": "boilerplate",
+    "username": "shredcast",
     "password": "test",
-    "database": "boilerplate_db_test",
+    "database": "shredcast_db_test",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
