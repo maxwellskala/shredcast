@@ -31,23 +31,29 @@ exports.signup = (User) => (req, res) => {
   .catch((err) => res.status(500).json({ err }));
 };
 
-exports.login = (req, res) => {
-  // pretty sure these aren't necessary because Passport
-  // will catch them with an incorrect email/pw anyways
-  // but let's be consistent
-  req.checkBody('email', 'Not a valid email address')
-    .isEmail();
-  req.checkBody('password', 'ASCII passwords only')
-    .isAscii();
-  const validationErrors = req.validationErrors();
-  if (validationErrors) {
-    return res
-      .status(400)
-      .json({ validationErrors });
-  }
-  return res
-    .status(200)
-    .json({ user: req.user });
+exports.login = (passport) => (req, res) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ err });
+    }
+    if (!user) {
+      return res
+        .status(401)
+        .json({ errors: ['Invalid email or password'] });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ err });
+      }
+      return res
+        .status(200)
+        .json({ user });
+    });
+  })(req, res);
 };
 
 exports.logout = (req, res) => {

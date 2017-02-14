@@ -30,11 +30,18 @@ class App extends Component {
   };
 
   handleSignupLoginResponse(response) {
+    const currentErrors = this.state.errors;
     const validationErrors = response.validationErrors;
     if (validationErrors) {
-      const currentErrors = this.state.errors;
       this.setState({
         errors: { ...currentErrors, signupLoginForm: validationErrors }
+      });
+      return;
+    }
+    const dataErrors = response.errors;
+    if (dataErrors) {
+      this.setState({
+        errors: { ...currentErrors, signupLoginForm: dataErrors }
       });
       return;
     }

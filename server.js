@@ -70,7 +70,7 @@ app.use(passport.session());
 // API endpoints
 app.get('/api/user', user.checkSession);
 app.post('/api/user/signup', user.signup(db.User));
-app.post('/api/user/login', passport.authenticate('local'), user.login);
+app.post('/api/user/login', user.login(passport));
 app.get('/api/user/logout', user.logout);
 
 db.sequelize.sync().then(() => {
