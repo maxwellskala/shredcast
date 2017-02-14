@@ -262,7 +262,7 @@ describe('routes/user', () => {
       chai.request(app)
         .get('/api/user/logout')
         .end((err, res) => {
-          expect(res.status).to.equal(204)
+          expect(res.status).to.equal(200)
           expect(res.error).to.be.empty;
           done();
         });
