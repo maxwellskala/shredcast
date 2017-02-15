@@ -73,11 +73,11 @@ class SignupLoginForm extends Component {
       );
     };
     return (
-      <div className='signup-login-container'>
+      <div className='SignupLoginForm'>
         <h3>{showLogin ? 'Login' : 'Signup'}</h3>
         {this.getFormToggleText(showLogin)}
         {this.renderErrors()}
-        <form className='signup-login-form' onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <label>
             Email:
             <input

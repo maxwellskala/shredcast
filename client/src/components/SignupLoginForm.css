@@ -1,11 +1,11 @@
-.errors-container > .error {
+.SignupLoginForm .errors-container > .error {
   color: red;
 }
 
-.toggle-form-text > a {
+.SignupLoginForm .toggle-form-text > a {
   color: blue;
 }
 
-.toggle-form-text > a:hover {
+.SignupLoginForm .toggle-form-text > a:hover {
   cursor: pointer;
 }
