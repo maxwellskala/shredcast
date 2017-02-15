@@ -44,6 +44,7 @@ passport.use(new localStrategy(
 ));
 
 const nodeEnv = process.env.NODE_ENV || 'development';
+console.log(nodeEnv);
 
 if (nodeEnv === 'production') {
   app.use(express.static('client/build'));
